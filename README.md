@@ -134,7 +134,7 @@ OUTPUT_DIR="/var/www/html/stats"
 The script excludes specified addresses from all statistics. Edit the `filter_excluded_ips` function to suit your network. The defaults exclude:
 
 - `10.98.0.0/16` — example internal subnet
-- `78.131.56.62` — example known-safe IP
+- `73.11.2.2` — example known-safe IP
 - `127.0.0.0/8` — loopback
 
 ### Fail2ban jail filtering
