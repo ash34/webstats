@@ -1,0 +1,19 @@
+# Generated output files — contain sensitive server data, never commit these
+output/
+
+# Log files
+*.log
+
+# Temporary files created by the script
+/tmp/
+
+# Editor backup files
+*~
+*.swp
+*.swo
+.DS_Store
+
+# If the script is ever run from the repo directory directly,
+# exclude any temp files it creates
+tmp_all_*
+tmp_today_*
