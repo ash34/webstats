@@ -70,7 +70,7 @@ Without Combined format the dashboard still works, but user agent data, the bot/
 mkdir -p /opt/scripts
 
 # Clone the repository
-git clone https://github.com/yourusername/apache_stats.git /opt/scripts/apache_stats
+git clone https://github.com/ash34/apache_stats.git /opt/scripts/apache_stats
 
 # Make the script executable
 chmod +x /opt/scripts/apache_stats/apache_stats.sh
@@ -80,7 +80,7 @@ Or download the script directly:
 
 ```bash
 curl -o /opt/scripts/apache_stats.sh \
-  https://raw.githubusercontent.com/yourusername/apache_stats/main/apache_stats.sh
+  https://raw.githubusercontent.com/ash34/apache_stats/main/apache_stats.sh
 chmod +x /opt/scripts/apache_stats.sh
 ```
 
