@@ -1,6 +1,6 @@
 #!/bin/bash
 # =============================================================================
-# apache_stats.sh  –  Apache / WordPress access log analyser
+# webstats.sh  –  Apache / WordPress access log analyser
 # Generates a self-contained HTML dashboard in ./output/index.html
 # Designed to be run every 5 minutes from cron.
 # =============================================================================
@@ -20,7 +20,7 @@ NOW_EPOCH="$(date +%s)"
 
 # Site address shown in the page title.
 # Auto-detected from WordPress wp-config.php, Apache ServerName, or falls back to localhost.
-# Override at any time by setting: SITE_ADDRESS=example.com ./apache_stats.sh
+# Override at any time by setting: SITE_ADDRESS=example.com ./webstats.sh
 SITE_ADDRESS="${SITE_ADDRESS:-}"
 WP_CONFIG_FOUND=""
 
