@@ -70,18 +70,18 @@ Without Combined format the dashboard still works, but user agent data, the bot/
 mkdir -p /opt/scripts
 
 # Clone the repository
-git clone https://github.com/ash34/apache_stats.git /opt/scripts/apache_stats
+git clone https://github.com/ash34/webstats.git /opt/scripts/webstats
 
 # Make the script executable
-chmod +x /opt/scripts/apache_stats/apache_stats.sh
+chmod +x /opt/scripts/webstats/webstats.sh
 ```
 
 Or download the script directly:
 
 ```bash
-curl -o /opt/scripts/apache_stats.sh \
-  https://raw.githubusercontent.com/ash34/apache_stats/main/apache_stats.sh
-chmod +x /opt/scripts/apache_stats.sh
+curl -o /opt/scripts/webstats.sh \
+  https://raw.githubusercontent.com/ash34/webstats/main/webstats.sh
+chmod +x /opt/scripts/webstats.sh
 ```
 
 ---
@@ -102,7 +102,7 @@ The dashboard title includes your site's domain name, detected automatically in 
 To override at runtime:
 
 ```bash
-SITE_ADDRESS="example.com" /opt/scripts/apache_stats.sh
+SITE_ADDRESS="example.com" /opt/scripts/webstats.sh
 ```
 
 To set a permanent default, edit line ~24 of the script:
@@ -118,7 +118,7 @@ Both bare domains (`example.com`) and subdomains (`sub.example.com`) are support
 Defaults to `/var/log/apache2/access.log`. Override with:
 
 ```bash
-APACHE_LOG="/var/log/apache2/mysite_access.log" /opt/scripts/apache_stats.sh
+APACHE_LOG="/var/log/apache2/mysite_access.log" /opt/scripts/webstats.sh
 ```
 
 ### Output directory
@@ -146,7 +146,7 @@ The script reads `/etc/fail2ban/jail.local` and includes only jails with `enable
 ## Running the script
 
 ```bash
-/opt/scripts/apache_stats.sh
+/opt/scripts/webstats.sh
 ```
 
 Expected output:
@@ -162,10 +162,10 @@ Stats: 4821 total requests, 312 today, generated at 2026-04-30 10:36:49 CEST
 Symlink the `output/` directory into your web root:
 
 ```bash
-ln -s /opt/scripts/output /var/www/html/stats
+ln -s /opt/scripts/output /var/www/html/webstats
 ```
 
-Then browse to `http://yourserver/stats/`.
+Then browse to `http://yourserver/webstats/`.
 
 Alternatively, point a dedicated Apache virtualhost at the output directory. **Restrict access by IP** so the dashboard is not publicly accessible — it contains information about your server's traffic and security posture.
 
@@ -182,15 +182,15 @@ The script is designed to run on a regular schedule so statistics accumulate thr
 Edit root's crontab with `crontab -e` and add:
 
 ```cron
-*/2 * * * * /opt/scripts/apache_stats.sh >> /var/log/apache_stats.log 2>&1
+*/2 * * * * /opt/scripts/webstats.sh >> /var/log/webstats.log 2>&1
 ```
 
-This runs every 2 minutes, matching the page's auto-refresh interval. Errors are captured in `/var/log/apache_stats.log`.
+This runs every 2 minutes, matching the page's auto-refresh interval. Errors are captured in `/var/log/webstats.log`.
 
 To run every 5 minutes instead:
 
 ```cron
-*/5 * * * * /opt/scripts/apache_stats.sh >> /var/log/apache_stats.log 2>&1
+*/5 * * * * /opt/scripts/webstats.sh >> /var/log/webstats.log 2>&1
 ```
 
 Verify the entry is active:
@@ -207,31 +207,31 @@ Systemd timers are the recommended modern alternative to cron. Benefits over cro
 
 **Step 1 — Create the service unit**
 
-Create `/etc/systemd/system/apache-stats.service`:
+Create `/etc/systemd/system/webstats.service`:
 
 ```ini
 [Unit]
 Description=Apache & WordPress Log Dashboard Generator
-Documentation=https://github.com/yourusername/apache_stats
+Documentation=https://github.com/ash34/webstats
 After=network.target apache2.service
 
 [Service]
 Type=oneshot
-ExecStart=/opt/scripts/apache_stats.sh
+ExecStart=/opt/scripts/webstats.sh
 StandardOutput=journal
 StandardError=journal
-SyslogIdentifier=apache-stats
+SyslogIdentifier=webstats
 User=root
 ```
 
 **Step 2 — Create the timer unit**
 
-Create `/etc/systemd/system/apache-stats.timer`:
+Create `/etc/systemd/system/webstats.timer`:
 
 ```ini
 [Unit]
 Description=Run Apache Stats dashboard generator every 2 minutes
-Requires=apache-stats.service
+Requires=webstats.service
 
 [Timer]
 # Run 30 seconds after boot so the dashboard is populated quickly after a restart
@@ -250,41 +250,41 @@ WantedBy=timers.target
 
 ```bash
 systemctl daemon-reload
-systemctl enable apache-stats.timer
-systemctl start apache-stats.timer
+systemctl enable webstats.timer
+systemctl start webstats.timer
 ```
 
 **Verify the timer is running:**
 
 ```bash
-systemctl status apache-stats.timer
-systemctl list-timers apache-stats.timer
+systemctl status webstats.timer
+systemctl list-timers webstats.timer
 ```
 
 **View logs:**
 
 ```bash
 # Follow live output
-journalctl -u apache-stats.service -f
+journalctl -u webstats.service -f
 
 # View today's runs
-journalctl -u apache-stats.service --since today
+journalctl -u webstats.service --since today
 
 # View last 10 runs
-journalctl -u apache-stats.service -n 50
+journalctl -u webstats.service -n 50
 ```
 
 **Trigger a run immediately without waiting for the timer:**
 
 ```bash
-systemctl start apache-stats.service
+systemctl start webstats.service
 ```
 
 **Stop and disable:**
 
 ```bash
-systemctl stop apache-stats.timer
-systemctl disable apache-stats.timer
+systemctl stop webstats.timer
+systemctl disable webstats.timer
 ```
 
 ---
@@ -303,7 +303,7 @@ To also reset the dashboard:
 
 ```bash
 rm /opt/scripts/output/index.html
-/opt/scripts/apache_stats.sh
+/opt/scripts/webstats.sh
 ```
 
 ---
@@ -348,7 +348,7 @@ ls -lh /var/log/apache2/access.log*
 The script could not auto-detect a domain. Set it explicitly:
 
 ```bash
-SITE_ADDRESS="example.com" /opt/scripts/apache_stats.sh
+SITE_ADDRESS="example.com" /opt/scripts/webstats.sh
 ```
 
 **`bc: command not found`**
