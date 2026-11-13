@@ -29,6 +29,7 @@ if [[ -z "${SITE_ADDRESS}" ]]; then
     for WP_CONFIG in \
         "/var/www/html/wp-config.php" \
         "/var/www/wordpress/wp-config.php" \
+        "/var/www/public_html/wp-config.php" \
         "/var/www/wp-config.php" \
         "/srv/www/wp-config.php" \
         "${LOG_DIR_PARENT}/wp-config.php"; do
